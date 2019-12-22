@@ -248,10 +248,38 @@ char  dialog() {
 								if (L.get_cell(tr->get_p().x, tr->get_p().y).get_object() == laba4::USER_TROOP) {//проверка  мы атакуем за отряд юзера? 
 									
 									if (L.get_cell(tr->get_p().x, tr->get_p().y - 1).get_object() == laba4::ENEMY_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_Enemy_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_Enemy_Summoner().get_troops(k)->get_p().x == tr->get_p().x) && (L.get_Enemy_Summoner().get_troops(k)->get_p().y == tr->get_p().y - 1))
+												break;
+										}
+										L.get_Enemy_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_Enemy_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "IResurrecting_Troop")  {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y - 1).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_Enemy_Summoner().set_health(L.get_Enemy_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -260,10 +288,38 @@ char  dialog() {
 								}
 								else { //мы атакуем за отряд врага
 									if (L.get_cell(tr->get_p().x, tr->get_p().y - 1).get_object() == laba4::USER_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_User_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_User_Summoner().get_troops(k)->get_p().x == tr->get_p().x) && (L.get_User_Summoner().get_troops(k)->get_p().y == tr->get_p().y - 1))
+												break;
+										}
+										L.get_User_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_User_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_User_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "IResurrecting_Troop") {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y - 1).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_User_Summoner().set_health(L.get_User_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -291,10 +347,38 @@ char  dialog() {
 								if (L.get_cell(tr->get_p().x, tr->get_p().y).get_object() == laba4::USER_TROOP) {//проверка  мы атакуем за отряд юзера? 
 
 									if (L.get_cell(tr->get_p().x - 1, tr->get_p().y).get_object() == laba4::ENEMY_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_Enemy_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_Enemy_Summoner().get_troops(k)->get_p().x == tr->get_p().x - 1) && (L.get_Enemy_Summoner().get_troops(k)->get_p().y == tr->get_p().y))
+												break;
+										}
+										L.get_Enemy_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_Enemy_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "IResurrecting_Troop") {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x - 1, tr->get_p().y - 1).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_Enemy_Summoner().set_health(L.get_Enemy_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -303,10 +387,38 @@ char  dialog() {
 								}
 								else { //мы атакуем за отряд врага
 									if (L.get_cell(tr->get_p().x - 1, tr->get_p().y).get_object() == laba4::USER_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_User_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_Enemy_Summoner().get_troops(k)->get_p().x == tr->get_p().x - 1) && (L.get_Enemy_Summoner().get_troops(k)->get_p().y == tr->get_p().y))
+												break;
+										}
+										L.get_User_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_User_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_User_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "IResurrecting_Troop") {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x - 1, tr->get_p().y).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_User_Summoner().set_health(L.get_User_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -334,10 +446,38 @@ char  dialog() {
 								if (L.get_cell(tr->get_p().x, tr->get_p().y).get_object() == laba4::USER_TROOP) {//проверка  мы атакуем за отряд юзера? 
 
 									if (L.get_cell(tr->get_p().x, tr->get_p().y + 1).get_object() == laba4::ENEMY_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_Enemy_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_Enemy_Summoner().get_troops(k)->get_p().x == tr->get_p().x) && (L.get_Enemy_Summoner().get_troops(k)->get_p().y == tr->get_p().y + 1))
+												break;
+										}
+										L.get_Enemy_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_Enemy_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "IResurrecting_Troop") {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y + 1).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_Enemy_Summoner().set_health(L.get_Enemy_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -346,10 +486,38 @@ char  dialog() {
 								}
 								else { //мы атакуем за отряд врага
 									if (L.get_cell(tr->get_p().x, tr->get_p().y + 1).get_object() == laba4::USER_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_User_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_User_Summoner().get_troops(k)->get_p().x == tr->get_p().x) && (L.get_User_Summoner().get_troops(k)->get_p().y == tr->get_p().y + 1))
+												break;
+										}
+										L.get_User_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_User_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_User_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "IResurrecting_Troop") {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y + 1).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_User_Summoner().set_health(L.get_User_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -371,16 +539,44 @@ char  dialog() {
 
 					}
 
-					if (q == 'a') {
+					if (q == 'd') {
 						if ((tr->get_p().x + 1) <= L.get_n() -1) {//проверка на выход за карту
 							if (L.get_cell(tr->get_p().x + 1, tr->get_p().y).get_cell() == laba4::EMPTY_CELL) {//проверка что клетка не часть ландшафта
 								if (L.get_cell(tr->get_p().x, tr->get_p().y).get_object() == laba4::USER_TROOP) {//проверка  мы атакуем за отряд юзера? 
 
 									if (L.get_cell(tr->get_p().x + 1, tr->get_p().y).get_object() == laba4::ENEMY_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_Enemy_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_Enemy_Summoner().get_troops(k)->get_p().x == tr->get_p().x + 1) && (L.get_Enemy_Summoner().get_troops(k)->get_p().y == tr->get_p().y))
+												break;
+										}
+										L.get_Enemy_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_Enemy_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_Enemy_Summoner().get_troops(k)->set_health(L.get_Enemy_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "IResurrecting_Troop") {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_Enemy_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x + 1, tr->get_p().y ).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_Enemy_Summoner().set_health(L.get_Enemy_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -389,10 +585,38 @@ char  dialog() {
 								}
 								else { //мы атакуем за отряд врага
 									if (L.get_cell(tr->get_p().x + 1, tr->get_p().y).get_object() == laba4::USER_TROOP) {//проверка кого мы атакуем. Отряд?
-
+										int k = 0;
+										for (k; k < L.get_User_Summoner().get_size_of_troops(); k++) {
+											if ((L.get_Enemy_Summoner().get_troops(k)->get_p().x == tr->get_p().x + 1) && (L.get_Enemy_Summoner().get_troops(k)->get_p().y == tr->get_p().y))
+												break;
+										}
+										L.get_User_Summoner().get_troops(k)->take_damage(*tr); //даём пизды
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {//если мы моральный даём пизды моралью
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() - ptr->get_moral());
+										}
+										if ((typeid(L.get_User_Summoner().get_troops(k)).name() == "Ordinary_Troop") || (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr1 = dynamic_cast<laba4::Ordinary_Troop*>(L.get_User_Summoner().get_troops(k));//если он моральный даём ему пизды его моралью
+											L.get_User_Summoner().get_troops(k)->set_health(L.get_User_Summoner().get_troops(k)->get_health() + ptr1->get_moral());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "IResurrecting_Troop") {
+											laba4::IResurrecting_Troop* ptr2 = dynamic_cast<laba4::IResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr2->set_dead_creatures(10 - ptr2->get_count());
+										}
+										if (typeid(L.get_User_Summoner().get_troops(k)).name() == "OResurrecting_Troop") {
+											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
+											ptr3->set_dead_creatures(10 - ptr3->get_count());
+										}
+										break;
 									}
 									if (L.get_cell(tr->get_p().x + 1, tr->get_p().y).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
-
+										int damage = tr->get_damage();
+										if ((typeid(*tr).name() == "Ordinary_Troop") || (typeid(*tr).name() == "OResurrecting_Troop")) {
+											laba4::Ordinary_Troop* ptr = dynamic_cast<laba4::Ordinary_Troop*>(tr);
+											damage += ptr->get_moral();
+										}
+										L.get_User_Summoner().set_health(L.get_User_Summoner().get_health() - damage);
+										break;
 									}
 									else {
 										cout << "You cant do this! It is Friendlyfire!" << endl;
@@ -423,7 +647,24 @@ char  dialog() {
                     if ((typeid(*tr).name()!="IResurrecting_Troop")&&(typeid(*tr).name()!="OResurrecting_Troop")){
                         cout<<"Your troop can't do this"<<endl;
                     }
-                }
+					else {
+						if (typeid(*tr).name() != "IResurrecting_Troop") {
+							laba4::IResurrecting_Troop* ptr = dynamic_cast<laba4::IResurrecting_Troop*>(tr);
+							try {ptr->resurrect_creatures();}
+							catch (exception & x) {
+							cout << x.what() << endl;
+							}
+						}
+						if (typeid(*tr).name() != "OResurrecting_Troop") {
+							laba4::OResurrecting_Troop* ptr = dynamic_cast<laba4::OResurrecting_Troop*>(tr);
+							try { ptr->resurrect_creatures(); }
+							catch (exception & x) {
+								cout << x.what() << endl;
+							}
+						}
+					}
+					break;
+				}
                 default:{
                     cout<<"incorrect choice"<<endl;
                     }

@@ -88,11 +88,11 @@ public:
             timeline[i]--;
         if (!elem.empty()){
             while (pos<elem.size()){
-                if (elem[pos].second<priority) break;
+                if (elem[pos].second<priority||((pos+1)==elem.size())) break;
                 pos++;
             }
-            if ((timeline[pos-1]==0)&&(pos<elem.size())) 
-				pos++;
+            if ((timeline[pos]==0)&&(pos<elem.size())) pos++;
+			while (elem[pos].second = priority) pos++;
         }
        elem.insert(elem.begin()+pos, value);
       timeline.insert(timeline.begin()+pos, 4);

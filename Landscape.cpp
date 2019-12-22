@@ -382,7 +382,7 @@ namespace  laba4{
 	//
 	//поменял функцию на интовую
     int Landscape::move_troop(char ch,Immoral_Troop *tr){
-         int k=User_Summoner.get_size_of_troops();
+         //int k=User_Summoner.get_size_of_troops();
         if (ch=='s'){//поменял букву
                 if ((tr->get_p().y+1)<=m-1){
                 if ((rectangle[tr->get_p().y+1][tr->get_p().x].get_cell()==POINT)&&(rectangle[tr->get_p().y+1][tr->get_p().x].get_object()==EMPTY_OBJECT)){

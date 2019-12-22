@@ -49,7 +49,10 @@ namespace   laba4{
                 health += creature.get_health() * dead_creatures;
                 dead_creatures =0;
             }
+			cout << "Your troop successfully resserected" << endl;
         }
+		else throw runtime_error("Your troop is full");
+			
     }
 	ostream& OResurrecting_Troop::print(ostream& s) const {
 		cout << "Speed:" << speed << endl;
