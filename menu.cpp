@@ -270,6 +270,8 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_Enemy_Summoner().get_troops(k)->get_health() == 0)
+											L.get_User_Summoner().set_experience(10);
 										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y - 1).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
@@ -310,6 +312,8 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_User_Summoner().get_troops(k)->get_health() == 0)
+											L.get_Enemy_Summoner().set_experience(10);
 										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y - 1).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
@@ -369,6 +373,8 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_Enemy_Summoner().get_troops(k)->get_health() == 0)
+											L.get_User_Summoner().set_experience(10);
 										break;
 									}
 									if (L.get_cell(tr->get_p().x - 1, tr->get_p().y - 1).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
@@ -409,7 +415,11 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_User_Summoner().get_troops(k)->get_health() == 0)
+											L.get_Enemy_Summoner().set_experience(10);
+									
 										break;
+										
 									}
 									if (L.get_cell(tr->get_p().x - 1, tr->get_p().y).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
 										int damage = tr->get_damage();
@@ -468,6 +478,8 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_Enemy_Summoner().get_troops(k)->get_health() == 0)
+											L.get_User_Summoner().set_experience(10);
 										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y + 1).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
@@ -508,6 +520,8 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_User_Summoner().get_troops(k)->get_health() == 0)
+											L.get_Enemy_Summoner().set_experience(10);
 										break;
 									}
 									if (L.get_cell(tr->get_p().x, tr->get_p().y + 1).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
@@ -567,6 +581,8 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_Enemy_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_Enemy_Summoner().get_troops(k)->get_health() == 0)
+											L.get_User_Summoner().set_experience(10);
 										break;
 									}
 									if (L.get_cell(tr->get_p().x + 1, tr->get_p().y ).get_object() == laba4::ENEMY_SUMMONER) {//проверка кого мы атакуем. Призыватель?
@@ -607,6 +623,8 @@ char  dialog() {
 											laba4::OResurrecting_Troop* ptr3 = dynamic_cast<laba4::OResurrecting_Troop*>(L.get_User_Summoner().get_troops(k));// если он воскрешаемый пишем погибших
 											ptr3->set_dead_creatures(10 - ptr3->get_count());
 										}
+										if (L.get_User_Summoner().get_troops(k)->get_health() == 0)
+											L.get_Enemy_Summoner().set_experience(10);
 										break;
 									}
 									if (L.get_cell(tr->get_p().x + 1, tr->get_p().y).get_object() == laba4::USER_SUMMONER) {//проверка кого мы атакуем. Призыватель?
