@@ -90,18 +90,22 @@ namespace laba4 {
         //setters
         Landscape& set_n(int n0) {if (n0>=0) n=n0; return *this; }
         Landscape& set_m(int m0) {if (m0>=0)m=m0; return *this; }
-        Landscape& set_user_summoner(Summoner s){User_Summoner=s; return *this;}
-        Landscape& set_enemy_summoner(Summoner s){Enemy_Summoner=s; return *this;}
+		Landscape& set_user_summoner(Summoner& s) { User_Summoner = s; return *this; }
+		Landscape& set_enemy_summoner(Summoner& s) { Enemy_Summoner = s; return *this; }
         Landscape& set_tab_school(School sc){ tab_schools.push_back(sc); return *this;}
+		Landscape& set_rectangle(Coordinates p0, Cell x) {
+			rectangle[p0.y][p0.x].set_cell(x.get_cell());
+			rectangle[p0.x][p0.y].set_object(x.get_object()); return *this;
+		}
          //functions
         friend ostream& operator <<(ostream& s, const  Landscape &a);
         void generation_map(int,int,int,int);
-        void input_map();
+		void input_map(const string fname);
         void create_summoner(Summoner&, string,vector<pair<string,unsigned>>&,const string);
         void read_school();
         void read_skill(School&);
         School* find_school(string);
-        void install_troop_in_cell();
+        void install_troop_in_cell(Summoner*);
          void push_queue(Summoner* s,Immoral_Troop* tr, Try_To_Be_Smart::Priorety_Queue<Object,unsigned>& qq);
         Object& move_queue(Try_To_Be_Smart::Priorety_Queue<Object,unsigned>& qq);
         void print_map();

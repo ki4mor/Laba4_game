@@ -20,7 +20,7 @@ namespace menu {
     char dialog_troop();
     char dialog_s();
     void menu_t(char d,laba4::Landscape &L);
-    void menu_s(char d,laba4::Summoner& s,laba4:: Landscape& L);
+	void menu_s(char d, laba4::Summoner& s, laba4::Landscape& L);
     void menu_troop(char d,laba4::Landscape &L,laba4::Immoral_Troop*);
     
 }

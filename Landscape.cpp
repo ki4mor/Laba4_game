@@ -87,13 +87,11 @@ namespace  laba4{
             rectangle[i][j].set_cell(EMPTYNESS);
              emptyness--;
          }
-        /*rectangle[User_Summoner.get_coordinates().x][User_Summoner.get_coordinates().y].set_cell(EMPTY_CELL);
-        rectangle[User_Summoner.get_coordinates().x][User_Summoner.get_coordinates().y].set_object(USER_SUMMONER);
-        rectangle[Enemy_Summoner.get_coordinates().x][Enemy_Summoner.get_coordinates().y].set_cell(EMPTY_CELL);
-        rectangle[Enemy_Summoner.get_coordinates().x][Enemy_Summoner.get_coordinates().y].set_object(ENEMY_SUMMONER);*/
+        
     }
-    void Landscape:: input_map(){
-        ifstream fs1("C:\\txt_files3\\input_map.txt");
+	void Landscape::input_map(const string fname) {
+		string  s="C:\\txt_files3\\";
+		ifstream fs1(s+fname+".txt");
         if (!fs1.is_open()) throw  runtime_error("File can't open!");
         char ch;
         fs1>>n;
@@ -109,10 +107,7 @@ namespace  laba4{
             rectangle.push_back(p);
         }
         fs1.close();
-       /* rectangle[User_Summoner.get_coordinates().y][User_Summoner.get_coordinates().x].set_cell(EMPTY_CELL);
-        rectangle[User_Summoner.get_coordinates().y][User_Summoner.get_coordinates().x].set_object(USER_SUMMONER);
-        rectangle[Enemy_Summoner.get_coordinates().y][Enemy_Summoner.get_coordinates().x].set_cell(EMPTY_CELL);
-        rectangle[Enemy_Summoner.get_coordinates().y][Enemy_Summoner.get_coordinates().x].set_object(ENEMY_SUMMONER);*/
+       
     }
     void Landscape:: fprint_map(){
         ofstream fs1("C:\\txt_files3\\input_map_save.txt");
@@ -166,7 +161,7 @@ namespace  laba4{
         }
         ss=S;
     }
-    void Landscape:: fprint_Summoner(){
+   /* void Landscape:: fprint_Summoner(){
         ofstream fst1("C:\\txt_files3\\User_Summoner_Save.txt");
         if (!fst1.is_open()) throw runtime_error ("File can't open");
         fst1<<User_Summoner.get_name();
@@ -188,6 +183,33 @@ namespace  laba4{
         for (int i=0;i<User_Summoner.get_size_of_knowledge() ;i++){
             fst1<<User_Summoner.get_knowledge(i).second;
             fst1<<' ';
+			for (int i=0;i<User_Summoner.get_size_of_troops();i++){
+				fst1<<typeid(*User_Summoner.get_troops(i)).name();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_count();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_speed();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_protection();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_p().x;
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_p().y;
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_damage();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_health();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_creature().get_name();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_creature().get_health();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_creature().get_damage();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_creature().get_protection();
+				fst1<<' ';
+				fst1<<User_Summoner.get_troops(i)->get_ptr_school()->get_name();
+			}
         }
         fst1.close();
         ofstream fst2("C:\\txt_files3\\Enemy_Summoner_Save.txt");
@@ -215,6 +237,7 @@ namespace  laba4{
         }
         fst2.close();
     }
+	*/
     
     void Landscape:: read_school(){
           ifstream school("C:\\txt_files3\\School.txt");
@@ -326,36 +349,57 @@ namespace  laba4{
         return nullptr;
     }
    
-    void Landscape:: install_troop_in_cell(){
-        Coordinates p(0,0);
-        p=User_Summoner.get_coordinates();
-        unsigned long k=User_Summoner.get_size_of_troops();
-        if (rectangle[p.x+1][p.y+1].get_object()==EMPTY_OBJECT){
-                rectangle[p.x+1][p.y+1].set_object(USER_TROOP);
-                Coordinates pp(p.x+1,p.y+1);
-                User_Summoner.get_troops(k-1)->set_p(pp);
-        }
-        if (rectangle[p.x][p.y+1].get_object()==EMPTY_OBJECT){
-                rectangle[p.x][p.y+1].set_object(USER_TROOP);
-                Coordinates pp(p.x,p.y+1);
-                User_Summoner.get_troops(k-1)->set_p(pp);
-        }
-        if (rectangle[p.x][p.y-1].get_object()==EMPTY_OBJECT){
-                rectangle[p.x][p.y-1].set_object(USER_TROOP);
-                Coordinates pp(p.x,p.y-1);
-                User_Summoner.get_troops(k-1)->set_p(pp);
-        }
-        if (rectangle[p.x+1][p.y].get_object()==EMPTY_OBJECT){
-                rectangle[p.x+1][p.y].set_object(USER_TROOP);
-                Coordinates pp(p.x+1,p.y);
-                User_Summoner.get_troops(k-1)->set_p(pp);
-        }
-        if (rectangle[p.x-1][p.y].get_object()==EMPTY_OBJECT){
-                rectangle[p.x-1][p.y].set_object(USER_TROOP);
-                Coordinates pp(p.x-1,p.y);
-                User_Summoner.get_troops(k-1)->set_p(pp);
-        }
-    }
+	void Landscape::install_troop_in_cell(Summoner* s) {
+		Coordinates p(0, 0);
+		p = s->get_coordinates();
+		unsigned long k = s->get_size_of_troops();
+		if (((p.x + 1) < m) && ((p.y + 1) < n)) {
+			if (rectangle[p.y + 1][p.x + 1].get_object() == EMPTY_OBJECT) {
+				rectangle[p.y + 1][p.x + 1].set_cell(EMPTY_CELL);
+				if (s->get_name() == User_Summoner.get_name()) rectangle[p.y + 1][p.x + 1].set_object(USER_TROOP);
+				if (s->get_name() == Enemy_Summoner.get_name()) rectangle[p.y + 1][p.x + 1].set_object(ENEMY_TROOP);
+				Coordinates pp(p.y + 1, p.x + 1);
+				s->get_troops(k - 1)->set_p(pp);
+				return;
+			}
+		}
+		if ((p.y + 1) < n)
+			if (rectangle[p.y + 1][p.x].get_object() == EMPTY_OBJECT) {
+				rectangle[p.y + 1][p.x].set_cell(EMPTY_CELL);
+				if (s->get_name() == User_Summoner.get_name()) rectangle[p.y + 1][p.x].set_object(USER_TROOP);
+				if (s->get_name() == Enemy_Summoner.get_name()) rectangle[p.y + 1][p.x].set_object(ENEMY_TROOP);
+				Coordinates pp(p.y + 1, p.x);
+				s->get_troops(k - 1)->set_p(pp);
+				return;
+			}
+		if ((p.y - 1) >= 0)
+			if (rectangle[p.y - 1][p.x].get_object() == EMPTY_OBJECT) {
+				rectangle[p.y - 1][p.x].set_cell(EMPTY_CELL);
+				if (s->get_name() == User_Summoner.get_name()) rectangle[p.y - 1][p.x].set_object(USER_TROOP);
+				if (s->get_name() == Enemy_Summoner.get_name()) rectangle[p.y - 1][p.x].set_object(ENEMY_TROOP);
+				Coordinates pp(p.y - 1, p.x);
+				s->get_troops(k - 1)->set_p(pp);
+				return;
+			}
+		if ((p.x + 1) < m)
+			if (rectangle[p.y][p.x + 1].get_object() == EMPTY_OBJECT) {
+				rectangle[p.y][p.x + 1].set_cell(EMPTY_CELL);
+				if (s->get_name() == User_Summoner.get_name()) rectangle[p.y][p.x + 1].set_object(USER_TROOP);
+				if (s->get_name() == Enemy_Summoner.get_name()) rectangle[p.y][p.x + 1].set_object(ENEMY_TROOP);
+				Coordinates pp(p.y, p.x + 1);
+				s->get_troops(k - 1)->set_p(pp);
+				return;
+			}
+		if ((p.x - 1) >= 0)
+			if (rectangle[p.y][p.x - 1].get_object() == EMPTY_OBJECT) {
+				rectangle[p.y][p.x - 1].set_cell(EMPTY_CELL);
+				if (s->get_name() == User_Summoner.get_name()) rectangle[p.y][p.x - 1].set_object(USER_TROOP);
+				if (s->get_name() == Enemy_Summoner.get_name()) rectangle[p.y][p.x - 1].set_object(ENEMY_TROOP);
+				Coordinates pp(p.y, p.x - 1);
+				s->get_troops(k - 1)->set_p(pp);
+				return;
+			}
+	}
     void Landscape:: push_queue(Summoner* s,Immoral_Troop* tr, Try_To_Be_Smart::Priorety_Queue<Object,unsigned>& qq){
         Object ob;
         ob.Summoner=s;
@@ -464,7 +508,9 @@ namespace  laba4{
             throw std::runtime_error("You don't have so much experience");
         if(S.get_experience()==0)
             throw std::runtime_error("No experience to upgrade");
-        else S.upschool(a, exp);
+		else { S.upschool(a, exp);
+		cout << "School was upgraded" << endl;
+		}
 }
     void Landscape::energy_accumulation(Summoner & S) {
         int enrg;
@@ -473,6 +519,7 @@ namespace  laba4{
         if (S.get_energy() + 100*S.get_accumulation_coeficient() < S.get_max_energy()){
             enrg=S.get_energy()+100*S.get_accumulation_coeficient();
             S.set_energy(enrg);
+			cout << "Energy was accumulated" << endl;
         }
         
         else
@@ -480,10 +527,13 @@ namespace  laba4{
         S.set_accumulation_coeficient(S.get_accumulation_coeficient() * 2);
     }
     void Landscape:: choose_skill(School *sch, Skill &sk,Summoner& S){
+		int g;
         for (int i=0;i<S.get_size_of_knowledge();i++){
+			g = i;
             if (S.get_knowledge(i).first==sch->get_name()){
                 for(int i=0;i<sch->get_size_of_data();i++){
-                    cout<<i+1<<"."<<sch->get_data(i).get_name()<<endl;
+                    if(S.get_knowledge(g).second>=sch->get_data(i).get_min_knowledge())
+						cout<<i+1<<"."<<sch->get_data(i).get_name()<<endl;
                 }
                 int k;
                 cin>>k;

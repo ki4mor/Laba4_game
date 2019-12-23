@@ -16,8 +16,10 @@ using namespace menu;
         do{
             char d = menu::dialog();
             menu::menu_t(d,c);
-            cout<<"Enter exit for exit"<<endl;;
+            cout<<"Enter exit for close game"<<endl;;
            cin>>q;
+		   system("cls");
+
         } while (q!="exit");
          return 0;
     }

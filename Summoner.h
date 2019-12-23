@@ -16,10 +16,10 @@ namespace laba4{
     private:
         string name;
         unsigned initiative;
-        unsigned  health;
+        int  health;
         const unsigned max_health=1000;
         unsigned energy;
-        const unsigned max_energy=100;
+        const unsigned max_energy=1000;
         unsigned experience;
         unsigned accumulation_coeficient;
         vector<Immoral_Troop*> troops;
@@ -30,7 +30,7 @@ namespace laba4{
        string get_name()  const  {return name;}
        unsigned get_initiative()  const { return initiative;}
        unsigned get_max_health()  const {return max_health;}
-       unsigned get_health() const {return health; }
+       int get_health() const {return health; }
        unsigned get_max_energy()  const  {return max_energy;}
        unsigned get_energy()  const  {return energy;}
        unsigned get_accumulation_coeficient()  const  {return accumulation_coeficient;}
@@ -43,7 +43,7 @@ namespace laba4{
         //setters
         Summoner& set_name(string nm){ name=nm; return *this;}
         Summoner& set_initiative(unsigned init){if (init>=0) initiative=init; return *this; }
-        Summoner& set_health(unsigned heal){if ((heal >=0)&&(heal<=max_health)) health=heal; return *this;}
+        Summoner& set_health(int heal){ health=heal; return *this;}
         Summoner& set_energy(unsigned energ){if ((energ >=0)&&(energ<=max_energy))  energy=energ;return *this;}
         Summoner& set_accumulation_coeficient(unsigned accum){if (accum >=0) accumulation_coeficient=accum; return *this; }
         Summoner& set_experience(unsigned exper){if (exper>=0) experience=exper; return *this;}
